@@ -30,38 +30,38 @@ Serial.println("readymessage");
 //display.clear(); //clear display on startup 
 } 
 void loop() { 
-// Run every 500 ms 
-if (millis() - lastUpdate >= 500 && millis()-timeOfLastImpulse > 100) { 
-int impulses = impulsCount; 
-lastUpdate = millis(); 
-Serial.println(millis()); 
-Serial.println(impulsCount); 
-// Update total based on the number of impulses detected 
-if (impulses = 1) { 
-  total_amount += 0.01; // penny 
-}
-else if (impulses = 2){
-  total_amount += 0.10; //dime 
-}
-else if (impulses = 3){
-  total_amount += 0.05; //nickel 
-}
-else if (impulses = 4){
-  total_amount += 0.25; //quarter 
-} 
-else {
-  total_amount += 0; // no coin
-}
-//if any impulses were handled, save the new total and reset impulse 
-counter 
-if (impulses > 0 && impulses <= 4) { 
-//EEPROM.put(0, total_amount);  // Save to EEPROM 
-impulsCount = 0; //reset counter 
-} 
-// Display total amount (in cents) if desired 
-int displayValue = (int)(total_amount * 100); // Convert to integer 
-cents 
-Serial.println(displayValue); 
-//display.showNumberDec(displayValue, false); 
+  // Run every 500 ms 
+  if (millis() - lastUpdate >= 500 && millis()-timeOfLastImpulse > 160) { 
+  int impulses = impulsCount; 
+  lastUpdate = millis(); 
+  Serial.println(millis()); 
+  Serial.println(impulsCount); 
+  // Update total based on the number of impulses detected 
+  if (impulses = 1) { 
+    total_amount += 0.01; // penny 
+  }
+  else if (impulses = 2){
+    total_amount += 0.10; //dime 
+  }
+  else if (impulses = 3){
+    total_amount += 0.05; //nickel 
+  }
+  else if (impulses = 4){
+    total_amount += 0.25; //quarter 
+  } 
+  else {
+    total_amount += 0; // no coin
+  }
+  //if any impulses were handled, save the new total and reset impulse 
+  counter 
+  if (impulses > 0 && impulses <= 4) { 
+  //EEPROM.put(0, total_amount);  // Save to EEPROM 
+  impulsCount = 0; //reset counter 
+  } 
+  // Display total amount (in cents) if desired 
+  int displayValue = (int)(total_amount * 100); // Convert to integer 
+  cents 
+  Serial.println(displayValue); 
+  //display.showNumberDec(displayValue, false); 
 } 
 }
