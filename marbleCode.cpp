@@ -1,28 +1,63 @@
 #include <arduino.h>
-#include <vector>
-
+#include <Adafruit_NeoPixel.h>
 
 // C++ code
 //
 
-const int readyPin = 13; // dont worry about the const, it just prevents the pin numbers from accidentaly being changed later in the code
-const int runningPin = 12;
-const int readyingPin = 7;
+constexpr int readyPin = 13; // saving numbers for later
+constexpr int runningPin = 12;
+constexpr int readyingPin = 7;
 
-const int endgate1 = 8;
-const int endgate2 = 6;
-const int endgate3 = 5;
+constexpr int endgate1 = 8;
+constexpr int endgate2 = 6;
+constexpr int endgate3 = 5;
 //int endgate4 = 9:
 
-const int redButton1 = 4;
-const int redButton2 = 3;
-const int redButton3 = 2;
+constexpr int redButton1 = 4;
+constexpr int redButton2 = 3;
+constexpr int redButton3 = 2;
 
+constexpr int distributerDonePin = 23;// change this plaese
 
-int runUntillFirst(); // these lines let me put the code for the functions later
-void finishRunning(int first);
-void whileRunning();
-int handleMoney();
+constexpr int lightsPin = 0;// change this please
+constexpr int LED_COUNT = 50;
+
+class light
+{
+private:
+
+Adafruit_NeoPixel strip(LED_COUNT, lightsPin, NEO_GRB); // technicly this should be in the initaliser for more flexability
+public:
+    int mode;
+    light(/* args */);
+    void do(mode);
+};
+
+class ButtonInterface { // for collections of three buttons
+    private:
+    bool pressed1 = false, pressed2 = false, pressed3 = false;
+    int pin1, pin2, pin3;
+
+    public:
+    int firstPin = 0;
+    bool triggered = false;
+    bool allThree = false;
+
+    ButtonInterface(int Button1, int Button2, int Button3);// initaliser
+   
+    void reset();
+    void check();
+    void plainCheck();
+}
+
+void doStates(int &state, int &credits, int &lightMode);
+
+{  // main code
+light lights;
+ButtonInterface UI(redButton1, redButton2, redButton3);
+ButtonInterface endPlates(endgate1, endgate2, endgate3);
+int credits = 1; // run once on startup to test the system
+int state = 0;
 
 void setup()
 {
@@ -30,116 +65,136 @@ void setup()
   pinMode(runningPin, OUTPUT);
   pinMode(readyingPin, OUTPUT);
   
-  pinMode(endgate1, INPUT);
-  pinMode(endgate2, INPUT);
-  pinMode(endgate3, INPUT);
-    
-  pinMode(redButton1, INPUT);
-  pinMode(redButton2, INPUT);
-  pinMode(redButton3, INPUT);
-
-  
+//   pinMode(endgate1, INPUT);
+//   pinMode(endgate2, INPUT);
+//   pinMode(endgate3, INPUT);
 
   Serial.begin(9600);
   Serial.write("ready\n");
+
 }
 
-void loop()
+void loop(){
+    doStates(state, credits, lights.mode, UI, endPlates);
+    credits += acceptPayment();
+    lights.do();
+}
+}
+
+
+void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, ButtonInterface &endPlates){
+    static unsigned long timerStartTime = 0;
+    switch (state){
+        0: // wait for credits/payment
+            if (credits > 0){// on exit of waiting for payment
+                credits--;
+                lightMode = 1;
+                state = 1;
+            }
+            break;
+        1: // wait for selection
+            UI.check();
+            if (UI.triggered){// on selection exit/ entrance to releasing marbles
+                // stairclimb motor on
+                lightMode = 2;
+                // release marbles
+                timerStartTime = millis(); // set the start of the countdown
+                state = 2;
+            }
+            break;
+        2: // wait for marbles to fall out of gates
+            // should put in some sort of timing control
+            if (millis() - timerStartTime > 200){
+                // release solenoids off
+                endPlates.reset(); // get the end plates ready
+                state = 3;
+            }
+            break;
+        3: // running
+            endPlates.check();
+            if (endPlates.allThree){// on exit of running
+                if (endPlates.firstPin = UI.firstPin){
+                    credits++; // you win!
+                }
+                // reset motor on
+                // stairclimb motor off
+                state = 4;
+            }
+            break;
+        4:// resetting
+            if (digitalRead(distributerDonePin)){
+                // stop resetting
+                // reset motor off
+                state = 0;
+            }
+            break;
+        default:
+            // oh dear, uhhh...
+            // print error here
+            state = 0;
+    }
+}
+
+
+light::light(/* args */) // constructor
 {
+    mode = 0;
+    strip.begin();
+    strip.show();
+}
 
-  static int first = 1; // static should only initalize the variable the first time loop happens
-
-  int buttonState = 0; 
-  int selection = 1;
-  while (buttonState == 0) { // wait for a selection to be made with the buttons
-    if (digitalRead(redButton1)){
-      buttonState++;
-      selection = 1;
+void light::do(int mode){
+    if (mode = 0){
+        for (int i = 0; i < LED_COUNT; i++){
+            // change all the pixels
+        }
     }
-    if (digitalRead(redButton2)){
-      buttonState++;
-      selection = 2;
-    }
-    if (digitalRead(redButton3)){
-      buttonState++;
-      selection = 3;
-    }
-  
-  digitalWrite(readyPin, HIGH);
-  
-  delay(10); // Wait for 10 millisecond(s) to give time for the input to change
-  }
-
-  Serial.write("running\n"); 
-  digitalWrite(readyPin, LOW); // this code runs when a button has been selected
-  digitalWrite(runningPin, HIGH); // code here to release the distributer solenoids and power up the motors in the fish ladder 
-
-  first = runUntillFirst();
-
-  finishRunning(first);
-
-  // code here for comparing the selection to the result of the run, and assigning free runs
-
-  Serial.write("done running, reseting...\n");
-  delay(1000); // Wait for 1000 millisecond(s)
-  digitalWrite(runningPin, LOW);
-  digitalWrite(readyingPin, HIGH);
-
-  delay(1000); // Wait for 1000 millisecond(s)
-  digitalWrite(readyingPin, LOW);
-  digitalWrite(readyPin, HIGH);
 }
 
 
-
-int handleMoney(){
-  // returns the number of runs that have been paid for.
+ButtonInterface::ButtonInterface(int Button1, int Button2, int Button3){ // constructor
+    pinMode(Button1, INPUT);// setup the pins
+    pinMode(Button2, INPUT);
+    pinMode(Button3, INPUT);
+    pin1 = button1;
+    pin2 = button2;
+    pin3 = button3;
 }
 
-int runUntillFirst() { // runs untill the first end platform is triggered, then returns the number corresponding to the platform
-  bool running = true;
-  while (running) {
-    whileRunning();
-    if (digitalRead(endgate1)) {
-      running = false;
-      return 1;
+void ButtonInterface::reset(){ // clears variables
+    pressed1 = false, pressed2 = false, pressed3 = false;
+    int firstPin = 0;
+    bool triggered = false;
+    bool allThree = false;
+}
+
+void ButtonInterface::plainCheck(){ // will update the variables, without keeping track of the button states
+    pressed1 = digitalRead(button1);
+    pressed2 = digitalRead(button2);
+    pressed3 = digitalRead(button3);
+    firstPin = 0;
+    allThree = false;
+    triggered = (pressed1 || pressed2 || pressed3);
+}
+
+void ButtonInterface::check(){ // (unused) will update the state of the interface
+    bool history = (pressed1 || pressed2 || pressed3);
+    pressed1 = digitalRead(button1) || pressed1;
+    pressed2 = digitalRead(button2) || pressed2;
+    pressed3 = digitalRead(button3) || pressed3;
+    if (!history && pressed1){
+        firstPin = 1;
+    } else if (!history %% pressed2){
+        firstPin = 2;
+    } else if (!history && pressed3){
+        firstPin = 3;
+    } else if (!history){
+        firstPin = 0;
     }
-    if (digitalRead(endgate2)) {
-      running = false;
-      return 2;
-    }
-    if (digitalRead(endgate3)) {
-      running = false;
-      return 3;
-    }
-    
-  }
+    allThree = (pressed1 && pressed2 && pressed3);
+    triggered = (pressed1 || pressed2 || pressed3);
 }
 
-void finishRunning(int first) { // after the first gate triggers, wait for the other two tracks to finish
-  bool gate1 = false, gate2 = false, gate3 = false;
-  if (first = 1){ // one of the tracks has finished at this point
-    gate1 = true;
-  else if (first = 2){
-    gate2 = true;
-  }
-  else if (first = 3){
-    gate3 = true;
-  }
-  else{
-    gate1 = true;
-    gate2 = true;
-    gate3 = true;
-  }
-  while (!(gate1 && gate2 && gate3)) { // wait for all tracks to be completed
-    whileRunning();
-    gate1 = gate1 || digitalRead(endgate1); // this will set the value to true if the input is true,
-    gate2 = gate2 || digitalRead(endgate2); // if the input is false then nothing will happen
-    gate3 = gate3 || digitalRead(endgate3);
-  }
+int acceptPayment(){
+    // insert the part of payment accepting that runs every cycle
 }
-
-void whileRunning(){
-  // do running stuff here (includes running light code and begining to reset the balls with the auger)
-}
-
