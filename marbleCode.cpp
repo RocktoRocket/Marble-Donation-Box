@@ -4,7 +4,7 @@
 // C++ code
 //
 
-constexpr int readyPin = 13; // saving numbers for later
+constexpr int readyPin = 13; // saving pinout numbers for later
 constexpr int runningPin = 12;
 constexpr int readyingPin = 7;
 
@@ -22,7 +22,7 @@ constexpr int distributerDonePin = 23;// change this plaese
 constexpr int lightsPin = 0;// change this please
 constexpr int LED_COUNT = 50;
 
-class light
+class light // for holding the light animations
 {
 private:
 
@@ -43,7 +43,7 @@ class ButtonInterface { // for collections of three buttons
     bool triggered = false;
     bool allThree = false;
 
-    ButtonInterface(int Button1, int Button2, int Button3);// initaliser
+    ButtonInterface(int Button1, int Button2, int Button3);// initaliser defined later
    
     void reset();
     void check();
@@ -52,7 +52,7 @@ class ButtonInterface { // for collections of three buttons
 
 void doStates(int &state, int &credits, int &lightMode);
 
-{  // main code
+{  // main code, uses its own scope to avoid global variables
 light lights;
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
