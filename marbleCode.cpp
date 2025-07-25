@@ -128,9 +128,10 @@ void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, But
         }
     }
     else{
-            // oh dear, uhhh...
-            // print error here
-            state = 0;
+        // oh dear, uhhh...
+        // print error here
+        Serial.write("ERROR: Invalid state. returning to startup state\n");
+        state = 0;
     }
 }
 
