@@ -84,51 +84,50 @@ void loop(){
 
 void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, ButtonInterface &endPlates){
     static unsigned long timerStartTime = 0;
-    switch (state){
-        0: // wait for credits/payment
-            if (credits > 0){// on exit of waiting for payment
-                credits--;
-                lightMode = 1;
-                state = 1;
+    if (state = 0){ // wait for credits/payment
+        if (credits > 0){// on exit of waiting for payment
+            credits--;
+            lightMode = 1;
+            state = 1;
+        }
+    }
+    else if (state = 1){// wait for selection
+        UI.check();
+        if (UI.triggered){// on selection exit/ entrance to releasing marbles
+            // stairclimb motor on
+            lightMode = 2;
+            // release marbles
+            timerStartTime = millis(); // set the start of the countdown
+            state = 2;
+        }
+    }
+    else if (state = 1){// wait for marbles to fall out of gates
+        // should put in some sort of timing control
+        if (millis() - timerStartTime > 200){
+            // release solenoids off
+            endPlates.reset(); // get the end plates ready
+            state = 3;
+        }
+    }
+    else if (state = 1){ // running
+        endPlates.check();
+        if (endPlates.allThree){// on exit of running
+            if (endPlates.firstPin = UI.firstPin){
+                credits++; // you win!
             }
-            break;
-        1: // wait for selection
-            UI.check();
-            if (UI.triggered){// on selection exit/ entrance to releasing marbles
-                // stairclimb motor on
-                lightMode = 2;
-                // release marbles
-                timerStartTime = millis(); // set the start of the countdown
-                state = 2;
-            }
-            break;
-        2: // wait for marbles to fall out of gates
-            // should put in some sort of timing control
-            if (millis() - timerStartTime > 200){
-                // release solenoids off
-                endPlates.reset(); // get the end plates ready
-                state = 3;
-            }
-            break;
-        3: // running
-            endPlates.check();
-            if (endPlates.allThree){// on exit of running
-                if (endPlates.firstPin = UI.firstPin){
-                    credits++; // you win!
-                }
-                // reset motor on
-                // stairclimb motor off
-                state = 4;
-            }
-            break;
-        4:// resetting
-            if (digitalRead(distributerDonePin)){
-                // stop resetting
-                // reset motor off
-                state = 0;
-            }
-            break;
-        default:
+            // reset motor on
+            // stairclimb motor off
+            state = 4;
+        }
+    }
+    else if (state = 1){// resetting
+        if (digitalRead(distributerDonePin)){
+             // stop resetting
+             // reset motor off
+            state = 0;
+        }
+    }
+    else{
             // oh dear, uhhh...
             // print error here
             state = 0;
