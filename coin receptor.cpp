@@ -37,20 +37,21 @@ lastUpdate = millis();
 Serial.println(millis()); 
 Serial.println(impulsCount); 
 // Update total based on the number of impulses detected 
-switch (impulses) { 
-case 1: 
-total_amount += 0.01; // penny 
-break; 
-case 2: 
-total_amount += 0.10; //dime 
-break; 
-case 3: 
-total_amount += 0.05; //nickel 
-break; 
-case 4: 
-total_amount += 0.25; //quarter 
-break; 
+if (impulses = 1) { 
+  total_amount += 0.01; // penny 
+}
+else if (impulses = 2){
+  total_amount += 0.10; //dime 
+}
+else if (impulses = 3){
+  total_amount += 0.05; //nickel 
+}
+else if (impulses = 4){
+  total_amount += 0.25; //quarter 
 } 
+else {
+  total_amount += 0; // no coin
+}
 //if any impulses were handled, save the new total and reset impulse 
 counter 
 if (impulses > 0 && impulses <= 4) { 
