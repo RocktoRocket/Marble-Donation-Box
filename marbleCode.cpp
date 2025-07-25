@@ -74,7 +74,7 @@ void setup()
 
 }
 
-void loop(){
+void loop(){ // this is where code goes to run each cycle
     doStates(state, credits, lights.mode, UI, endPlates);
     credits += acceptPayment();
     lights.do();
