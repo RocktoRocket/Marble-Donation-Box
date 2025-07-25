@@ -118,21 +118,18 @@ int runUntillFirst() { // runs untill the first end platform is triggered, then 
 
 void finishRunning(int first) { // after the first gate triggers, wait for the other two tracks to finish
   bool gate1 = false, gate2 = false, gate3 = false;
-  switch (first){ // one of the tracks has finished at this point
-    case 1:
-      gate1 = true;
-      break;
-    case 2:
-      gate2 = true;
-      break;
-    case 3:
-      gate3 = true;
-      break;
-    default:
-      gate1 = true;
-      gate2 = true;
-      gate3 = true;
-      break;
+  if (first = 1){ // one of the tracks has finished at this point
+    gate1 = true;
+  else if (first = 2){
+    gate2 = true;
+  }
+  else if (first = 3){
+    gate3 = true;
+  }
+  else{
+    gate1 = true;
+    gate2 = true;
+    gate3 = true;
   }
   while (!(gate1 && gate2 && gate3)) { // wait for all tracks to be completed
     whileRunning();
