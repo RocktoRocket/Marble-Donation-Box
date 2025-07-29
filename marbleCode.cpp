@@ -101,7 +101,7 @@ void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, But
             state = 2;
         }
     }
-    else if (state = 1){// wait for marbles to fall out of gates
+    else if (state = 2){// wait for marbles to fall out of gates
         // should put in some sort of timing control
         if (millis() - timerStartTime > 200){
             // release solenoids off
@@ -109,7 +109,7 @@ void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, But
             state = 3;
         }
     }
-    else if (state = 1){ // running
+    else if (state = 3){ // running
         endPlates.check();
         if (endPlates.allThree){// on exit of running
             if (endPlates.firstPin = UI.firstPin){
@@ -120,7 +120,7 @@ void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, But
             state = 4;
         }
     }
-    else if (state = 1){// resetting
+    else if (state = 4){// resetting
         if (digitalRead(distributerDonePin)){
              // stop resetting
              // reset motor off
