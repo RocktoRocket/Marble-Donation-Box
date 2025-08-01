@@ -1,5 +1,5 @@
 #include <arduino.h>
-#include <Adafruit_NeoPixel.h>
+//#include <Adafruit_NeoPixel.h>
 
 // C++ code
 //
@@ -198,5 +198,6 @@ void ButtonInterface::check(){ // (unused) will update the state of the interfac
 int acceptPayment(){
     // insert the part of payment accepting that runs every cycle
 }
+
 
 
