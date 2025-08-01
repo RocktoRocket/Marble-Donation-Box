@@ -129,9 +129,9 @@ ButtonInterface::ButtonInterface(int Button1, int Button2, int Button3){ // cons
     pinMode(Button1, INPUT);// setup the pins
     pinMode(Button2, INPUT);
     pinMode(Button3, INPUT);
-    pin1 = button1;
-    pin2 = button2;
-    pin3 = button3;
+    pin1 = Button1;
+    pin2 = Button2;
+    pin3 = Button3;
 }
 
 void ButtonInterface::reset(){ // clears variables
@@ -171,6 +171,7 @@ void ButtonInterface::check(){ // (unused) will update the state of the interfac
 int acceptPayment(){
     // insert the part of payment accepting that runs every cycle
 }
+
 
 
 
