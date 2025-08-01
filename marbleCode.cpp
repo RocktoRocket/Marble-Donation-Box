@@ -1,5 +1,4 @@
 #include <arduino.h>
-#include <Adafruit_NeoPixel.h>
 
 // C++ code
 //
@@ -19,19 +18,7 @@ constexpr int redButton3 = 2;
 
 constexpr int distributerDonePin = 23;// change this plaese
 
-constexpr int lightsPin = 0;// change this please
-constexpr int LED_COUNT = 50;
 
-class light // for holding the light animations
-{
-private:
-
-Adafruit_NeoPixel strip(LED_COUNT, lightsPin, NEO_GRB); // technicly this should be in the initaliser for more flexability
-public:
-    int mode;
-    light(/* args */);
-    void do(mode);
-};
 
 class ButtonInterface { // for collections of three buttons
     private:
@@ -48,12 +35,11 @@ class ButtonInterface { // for collections of three buttons
     void reset();
     void check();
     void plainCheck();
-}
+};
 
-void doStates(int &state, int &credits, int &lightMode);
+void doStates(int &state, int &credits);
 
-{  // main code, uses its own scope to avoid global variables
-light endLights;
+
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
 int credits = 1; // run once on startup to test the system
@@ -75,19 +61,19 @@ void setup()
 }
 
 void loop(){ // this is where code goes to run each cycle
-    doStates(state, credits, lights.mode, UI, endPlates);
+    doStates(state, credits, UI, endPlates);
     credits += acceptPayment();
-    //endLights.do();
-}
+   
 }
 
 
-void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, ButtonInterface &endPlates){
+
+void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &endPlates){
     static unsigned long timerStartTime = 0;
     if (state = 0){ // wait for credits/payment
         if (credits > 0){// on exit of waiting for payment
             credits--;
-            lightMode = 1;
+           
             state = 1;
         }
     }
@@ -95,7 +81,7 @@ void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, But
         UI.check();
         if (UI.triggered){// on selection exit/ entrance to releasing marbles
             // stairclimb motor on
-            lightMode = 2;
+           
             // release marbles
             timerStartTime = millis(); // set the start of the countdown
             state = 2;
@@ -136,29 +122,16 @@ void doStates(int &state, int &credits, int &lightMode, ButtonInterface &UI, But
 }
 
 
-light::light(/* args */) // constructor
-{
-    mode = 0;
-    strip.begin();
-    strip.show();
-}
 
-void light::do(int mode){
-    if (mode = 0){
-        for (int i = 0; i < LED_COUNT; i++){
-            // change all the pixels
-        }
-    }
-}
 
 
 ButtonInterface::ButtonInterface(int Button1, int Button2, int Button3){ // constructor
     pinMode(Button1, INPUT);// setup the pins
     pinMode(Button2, INPUT);
     pinMode(Button3, INPUT);
-    pin1 = button1;
-    pin2 = button2;
-    pin3 = button3;
+    pin1 = Button1;
+    pin2 = Button2;
+    pin3 = Button3;
 }
 
 void ButtonInterface::reset(){ // clears variables
@@ -169,9 +142,9 @@ void ButtonInterface::reset(){ // clears variables
 }
 
 void ButtonInterface::plainCheck(){ // will update the variables, without keeping track of the button states
-    pressed1 = digitalRead(button1);
-    pressed2 = digitalRead(button2);
-    pressed3 = digitalRead(button3);
+    pressed1 = digitalRead(pin1);
+    pressed2 = digitalRead(pin2);
+    pressed3 = digitalRead(pin3);
     firstPin = 0;
     allThree = false;
     triggered = (pressed1 || pressed2 || pressed3);
@@ -179,12 +152,12 @@ void ButtonInterface::plainCheck(){ // will update the variables, without keepin
 
 void ButtonInterface::check(){ // (unused) will update the state of the interface
     bool history = (pressed1 || pressed2 || pressed3);
-    pressed1 = digitalRead(button1) || pressed1;
-    pressed2 = digitalRead(button2) || pressed2;
-    pressed3 = digitalRead(button3) || pressed3;
+    pressed1 = digitalRead(pin1) || pressed1;
+    pressed2 = digitalRead(pin2) || pressed2;
+    pressed3 = digitalRead(pin3) || pressed3;
     if (!history && pressed1){
         firstPin = 1;
-    } else if (!history %% pressed2){
+    } else if (!history && pressed2){
         firstPin = 2;
     } else if (!history && pressed3){
         firstPin = 3;
@@ -198,4 +171,10 @@ void ButtonInterface::check(){ // (unused) will update the state of the interfac
 int acceptPayment(){
     // insert the part of payment accepting that runs every cycle
 }
+
+
+
+
+
+
 
