@@ -35,7 +35,7 @@ class ButtonInterface { // for collections of three buttons
     void reset();
     void check();
     void plainCheck();
-}
+};
 
 void doStates(int &state, int &credits, int &lightMode);
 
@@ -172,6 +172,7 @@ void ButtonInterface::check(){ // (unused) will update the state of the interfac
 int acceptPayment(){
     // insert the part of payment accepting that runs every cycle
 }
+
 
 
 
