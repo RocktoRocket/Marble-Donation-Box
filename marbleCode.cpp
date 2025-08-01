@@ -1,5 +1,4 @@
 #include <arduino.h>
-//#include <Adafruit_NeoPixel.h>
 
 // C++ code
 //
@@ -19,19 +18,7 @@ constexpr int redButton3 = 2;
 
 constexpr int distributerDonePin = 23;// change this plaese
 
-/*constexpr int lightsPin = 0;// change this please
-constexpr int LED_COUNT = 50;
 
-class light // for holding the light animations
-{
-private:
-
-Adafruit_NeoPixel strip(LED_COUNT, lightsPin, NEO_GRB); // technicly this should be in the initaliser for more flexability
-public:
-    int mode;
-//    light(/* args */);
-//    void do(mode);
-//};
 
 class ButtonInterface { // for collections of three buttons
     private:
@@ -53,7 +40,7 @@ class ButtonInterface { // for collections of three buttons
 void doStates(int &state, int &credits, int &lightMode);
 
 {  // main code, uses its own scope to avoid global variables
-//light endLights;
+
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
 int credits = 1; // run once on startup to test the system
@@ -77,17 +64,17 @@ void setup()
 void loop(){ // this is where code goes to run each cycle
     doStates(state, credits, lights.mode, UI, endPlates);
     credits += acceptPayment();
-    //endLights.do();
+   
 }
 }
 
 
-void doStates(int &state, int &credits, /*int &lightMode,*/ ButtonInterface &UI, ButtonInterface &endPlates){
+void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &endPlates){
     static unsigned long timerStartTime = 0;
     if (state = 0){ // wait for credits/payment
         if (credits > 0){// on exit of waiting for payment
             credits--;
-            //lightMode = 1;
+           
             state = 1;
         }
     }
@@ -95,7 +82,7 @@ void doStates(int &state, int &credits, /*int &lightMode,*/ ButtonInterface &UI,
         UI.check();
         if (UI.triggered){// on selection exit/ entrance to releasing marbles
             // stairclimb motor on
-            //lightMode = 2;
+           
             // release marbles
             timerStartTime = millis(); // set the start of the countdown
             state = 2;
@@ -136,20 +123,7 @@ void doStates(int &state, int &credits, /*int &lightMode,*/ ButtonInterface &UI,
 }
 
 
-/*light::light() // constructor
-{
-    mode = 0;
-    strip.begin();
-    strip.show();
-}
 
-void light::do(int mode){
-    if (mode = 0){
-        for (int i = 0; i < LED_COUNT; i++){
-            // change all the pixels
-        }
-    }
-}*/
 
 
 ButtonInterface::ButtonInterface(int Button1, int Button2, int Button3){ // constructor
@@ -198,6 +172,7 @@ void ButtonInterface::check(){ // (unused) will update the state of the interfac
 int acceptPayment(){
     // insert the part of payment accepting that runs every cycle
 }
+
 
 
 
