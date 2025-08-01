@@ -53,7 +53,7 @@ class ButtonInterface { // for collections of three buttons
 void doStates(int &state, int &credits, int &lightMode);
 
 {  // main code, uses its own scope to avoid global variables
-light lights;
+light endLights;
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
 int credits = 1; // run once on startup to test the system
@@ -77,7 +77,7 @@ void setup()
 void loop(){ // this is where code goes to run each cycle
     doStates(state, credits, lights.mode, UI, endPlates);
     credits += acceptPayment();
-    lights.do();
+    //endLights.do();
 }
 }
 
@@ -198,3 +198,4 @@ void ButtonInterface::check(){ // (unused) will update the state of the interfac
 int acceptPayment(){
     // insert the part of payment accepting that runs every cycle
 }
+
