@@ -142,9 +142,9 @@ void ButtonInterface::reset(){ // clears variables
 }
 
 void ButtonInterface::plainCheck(){ // will update the variables, without keeping track of the button states
-    pressed1 = digitalRead(button1);
-    pressed2 = digitalRead(button2);
-    pressed3 = digitalRead(button3);
+    pressed1 = digitalRead(pin1);
+    pressed2 = digitalRead(pin2);
+    pressed3 = digitalRead(pin3);
     firstPin = 0;
     allThree = false;
     triggered = (pressed1 || pressed2 || pressed3);
@@ -152,12 +152,12 @@ void ButtonInterface::plainCheck(){ // will update the variables, without keepin
 
 void ButtonInterface::check(){ // (unused) will update the state of the interface
     bool history = (pressed1 || pressed2 || pressed3);
-    pressed1 = digitalRead(button1) || pressed1;
-    pressed2 = digitalRead(button2) || pressed2;
-    pressed3 = digitalRead(button3) || pressed3;
+    pressed1 = digitalRead(pin1) || pressed1;
+    pressed2 = digitalRead(pin2) || pressed2;
+    pressed3 = digitalRead(pin3) || pressed3;
     if (!history && pressed1){
         firstPin = 1;
-    } else if (!history %% pressed2){
+    } else if (!history && pressed2){
         firstPin = 2;
     } else if (!history && pressed3){
         firstPin = 3;
@@ -171,7 +171,6 @@ void ButtonInterface::check(){ // (unused) will update the state of the interfac
 int acceptPayment(){
     // insert the part of payment accepting that runs every cycle
 }
-
 
 
 
