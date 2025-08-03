@@ -1,3 +1,5 @@
+#ifndef BUTTONS_H_
+#define BUTTONS_H_
 #include <arduino.h>
 
 class ButtonInterface { // for collections of three buttons
@@ -16,3 +18,4 @@ class ButtonInterface { // for collections of three buttons
     void check();
     void plainCheck();
 };
+#endif // BUTTONS_H_
