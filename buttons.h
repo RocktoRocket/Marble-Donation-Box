@@ -1,4 +1,4 @@
-
+#include <arduino.h>
 
 class ButtonInterface { // for collections of three buttons
     private:
