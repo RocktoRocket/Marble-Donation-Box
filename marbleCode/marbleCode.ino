@@ -86,9 +86,9 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     else if (state = 1){// wait for selection
         UI.check();
         if (UI.triggered){// on selection exit/ entrance to releasing marbles
-            // stairclimb motor on
+            digitalWrite(stairMotor, HIGH);// stairclimb motor on
            
-            // release marbles
+            digitalWrite(marbleRelease, HIGH);// release marbles
             timerStartTime = millis(); // set the start of the countdown
             state = 2;
         }
@@ -96,7 +96,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     else if (state = 2){// wait for marbles to fall out of gates
         // should put in some sort of timing control
         if (millis() - timerStartTime > 200){
-            // release solenoids off
+            digitalWrite(marbleRelease, LOW);// release solenoids off
             endPlates.reset(); // get the end plates ready
             state = 3;
         }
@@ -107,15 +107,15 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             if (endPlates.firstPin = UI.firstPin){
                 credits++; // you win!
             }
-            // reset motor on
-            // stairclimb motor off
+            digitalWrite(augerMotor, HIGH);// reset motor on
+            digitalWrite(stairclimb, LOW);// stairclimb motor off
             state = 4;
         }
     }
     else if (state = 4){// resetting
         if (digitalRead(distributerDonePin)){
              // stop resetting
-             // reset motor off
+            digitalWrite(augerMotor, LOW); // reset motor off
             state = 0;
         }
     }
