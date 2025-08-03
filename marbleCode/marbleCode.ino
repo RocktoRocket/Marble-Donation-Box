@@ -4,20 +4,31 @@
 // C++ code
 //
 
-constexpr int readyPin = 13; // saving pinout numbers for later
-constexpr int runningPin = 12;
-constexpr int readyingPin = 7;
+constexpr pin_size_t readyPin = 13; // saving pinout numbers for later
+constexpr pin_size_t runningPin = 12; // these three are for testing purposes
+constexpr pin_size_t readyingPin = 7;
 
-constexpr int endgate1 = 8;
-constexpr int endgate2 = 6;
-constexpr int endgate3 = 5;
-//int endgate4 = 9:
+constexpr pin_size_t endgate1 = 8;
+constexpr pin_size_t endgate2 = 6;
+constexpr pin_size_t endgate3 = 5;
 
-constexpr int redButton1 = 4;
-constexpr int redButton2 = 3;
-constexpr int redButton3 = 2;
+constexpr pin_size_t redButton1 = 4;
+constexpr pin_size_t redButton2 = 3;
+constexpr pin_size_t redButton3 = 2;
 
-constexpr int distributerDonePin = 23;// change this plaese
+constexpr pin_size_t buttonLight1 = 9;
+constexpr pin_size_t buttonLight2 = 10;
+constexpr pin_size_t buttonLight3 = 11;
+
+
+// placeholder pin numbers change these please
+constexpr pin_size_t distributerDonePin = 23; // the limit switch on the third distributer section
+constexpr pin_size_t marbleRelease = 24;
+constexpr pin_size_t distributerReset = 25;
+constexpr pin_size_t augerMotor = 26;
+constexpr pin_size_t stairMotor = 27;
+constexpr pin_size_t gyroMotor = 28;
+
 
 
 ButtonInterface UI(redButton1, redButton2, redButton3);
