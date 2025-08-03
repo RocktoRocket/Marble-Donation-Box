@@ -20,10 +20,6 @@ constexpr int redButton3 = 2;
 constexpr int distributerDonePin = 23;// change this plaese
 
 
-
-
-
-
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
 int credits = 1; // run once on startup to test the system
@@ -104,11 +100,6 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
         state = 0;
     }
 }
-
-
-
-
-
 
 
 int acceptPayment(){
