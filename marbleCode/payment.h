@@ -5,6 +5,8 @@
 #include <EEPROM.h> 
 
 void paymentInturupt();
+int coinReaderUpdate();
+int billReaderUpdate()
 int acceptPayment();
 
 #endif //PAYMENT_H_

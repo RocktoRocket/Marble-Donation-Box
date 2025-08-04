@@ -2,14 +2,43 @@
 
 constexpr int coinPulseDelay = 120; // miliseconds between falling edges in pulse train
 
-volatile int paymentImpulseCount = 0;
-volatile unsigned long paymentLastImpulse = 0;
+volatile int coinPaymentImpulseCount = 0;
 
-void paymentInturupt(){
-    paymentImpulseCount += 1;
-    paymentLastImpulse = miliseconds();
+
+void paymentInturuptCoin(){
+    coinPaymentImpulseCount += 1;
+}
+
+int coinReaderUpdate(){
+    constexpr int coinConversions[] = {0,1,10,5,25};
+    static int lastPaymentCount = 0;
+    if (coinPaymentImpulseCount - lastPaymentCount){ // if the number of pulses has not changed
+        lastPaymentCount = coinPaymentImpulseCount;
+        return 0;
+    } else { // if the pulses have stopped coming
+        if (paymentImpulseCount < 0 || paymentImpulseCount > 4){
+            paymentImpulseCount = 0;
+        }
+        int amount = coinConversions[coinPaymentImpulseCount];
+        coinPaymentImpulseCount = 0;
+        return amount;
+    }
+}
+
+int billReaderUpdate(){
+    //code here
 }
 
 int acceptPayment(){
-    // insert the part of payment accepting that runs every cycle
+    int centsThisCycle = 0;
+
+    static unsigned long lastCoinCheck = 0;
+    if (miliseconds()-lastCoinCheck < coinPulseDelay){
+        centsThisCycle += coinReaderUpdate();
+        lastCoinCheck = miliseconds();
+    }
+    
+    //something for the bill reader here
+
+    return centsThisCycle;
 }
