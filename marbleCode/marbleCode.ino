@@ -78,6 +78,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     static unsigned long timerStartTime = 0;
     if (state = 0){ // wait for credits/payment
         if (credits > 0){// on exit of waiting for payment
+            Serial.write("payment recived\n");
             credits--;
            
             state = 1;
@@ -86,7 +87,11 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     else if (state = 1){// wait for selection
         UI.check();
         if (UI.triggered){// on selection exit/ entrance to releasing marbles
+
+            Serial.write("path selected\n");
+
             digitalWrite(stairMotor, HIGH);// stairclimb motor on
+
            
             digitalWrite(marbleRelease, HIGH);// release marbles
             timerStartTime = millis(); // set the start of the countdown
@@ -104,7 +109,9 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     else if (state = 3){ // running
         endPlates.check();
         if (endPlates.allThree){// on exit of running
+            Serial.write("done running\n");
             if (endPlates.firstPin = UI.firstPin){
+                Serial.write("you win\n");
                 credits++; // you win!
             }
             digitalWrite(augerMotor, HIGH);// reset motor on
@@ -114,6 +121,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     }
     else if (state = 4){// resetting
         if (digitalRead(distributerDonePin)){
+            Serial.write("done reseting\n");
              // stop resetting
             digitalWrite(augerMotor, LOW); // reset motor off
             state = 0;

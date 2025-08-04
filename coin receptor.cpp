@@ -11,7 +11,7 @@ int i;
 volatile int impulsCount=0; //count pulses from coin reader 
 float total_amount=0; //store total amount entered into coin reader 
 unsigned long lastUpdate = 0; //used for timing 
-volitile unsigned long timeOfLastImpulse = 0; 
+volatile unsigned long timeOfLastImpulse = 0; 
 //Interrupt service routine to increment pulse count 
 void incomingImpuls() 
 { 
@@ -22,8 +22,7 @@ void setup() {
 Serial.begin(9600); //initialize Serial comjunication for debugging 
 attachInterrupt(digitalPinToInterrupt(2), incomingImpuls, FALLING); 
 //attatch interrupt to pin 2 for the FALLING edge signal, pulse input 
-EEPROM.get(0, total_amount);  // Load previously saved amount from 
-EEPROM at address 0 
+EEPROM.get(0, total_amount);  // Load previously saved amount from EEPROM at address 0 
 Serial.println("readymessage"); 
 // Set display brightness and clear it 
 //display.setBrightness(0x0f);// Max brightness 
@@ -52,15 +51,13 @@ void loop() {
   else {
     total_amount += 0; // no coin
   }
-  //if any impulses were handled, save the new total and reset impulse 
-  counter 
+  //if any impulses were handled, save the new total and reset impulse counter 
   if (impulses > 0 && impulses <= 4) { 
   //EEPROM.put(0, total_amount);  // Save to EEPROM 
   impulsCount = 0; //reset counter 
   } 
   // Display total amount (in cents) if desired 
-  int displayValue = (int)(total_amount * 100); // Convert to integer 
-  cents 
+  int displayValue = (int)(total_amount * 100); // Convert to integer cents 
   Serial.println(displayValue); 
   //display.showNumberDec(displayValue, false); 
 } 
