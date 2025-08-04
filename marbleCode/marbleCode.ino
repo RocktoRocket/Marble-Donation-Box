@@ -117,7 +117,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
                 credits++; // you win!
             }
             digitalWrite(augerMotor, HIGH);// reset motor on
-            digitalWrite(stairclimb, LOW);// stairclimb motor off
+            digitalWrite(stairMotor, LOW);// stairclimb motor off
             state = 4;
         }
     }
@@ -136,5 +136,6 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
         state = 0;
     }
 }
+
 
 
