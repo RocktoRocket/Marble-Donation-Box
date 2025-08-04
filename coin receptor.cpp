@@ -11,7 +11,7 @@ int i;
 volatile int impulsCount=0; //count pulses from coin reader 
 float total_amount=0; //store total amount entered into coin reader 
 unsigned long lastUpdate = 0; //used for timing 
-volitile unsigned long timeOfLastImpulse = 0; 
+volatile unsigned long timeOfLastImpulse = 0; 
 //Interrupt service routine to increment pulse count 
 void incomingImpuls() 
 { 
