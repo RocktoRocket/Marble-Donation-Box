@@ -16,8 +16,8 @@ int coinReaderUpdate(){
         lastPaymentCount = coinPaymentImpulseCount;
         return 0;
     } else { // if the pulses have stopped coming
-        if (paymentImpulseCount < 0 || paymentImpulseCount > 4){
-            paymentImpulseCount = 0;
+        if (coinPaymentImpulseCount < 0 || coinPaymentImpulseCount > 4){
+            coinPaymentImpulseCount = 0;
         }
         int amount = coinConversions[coinPaymentImpulseCount];
         coinPaymentImpulseCount = 0;
@@ -34,9 +34,9 @@ int acceptPayment(){
     int centsThisCycle = 0;
 
     static unsigned long lastCoinCheck = 0;
-    if (miliseconds()-lastCoinCheck < coinPulseDelay){
+    if (millis()-lastCoinCheck < coinPulseDelay){
         centsThisCycle += coinReaderUpdate();
-        lastCoinCheck = miliseconds();
+        lastCoinCheck = millis();
     }
     
     //something for the bill reader here

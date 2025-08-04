@@ -1,35 +1,37 @@
 #include <arduino.h>
 #include "buttons.h"
+#include "payment.h"
 
 // C++ code
 //
 
 // placeholder pin numbers change these please
-constexpr pin_size_t readyPin = 13; // saving pinout numbers for later
-constexpr pin_size_t runningPin = 12; // these three are for testing purposes
-constexpr pin_size_t readyingPin = 7;
+constexpr int readyPin = 13; // saving pinout numbers for later
+constexpr int runningPin = 12; // these three are for testing purposes
+constexpr int readyingPin = 7;
 
-constexpr pin_size_t endgate1 = 8;
-constexpr pin_size_t endgate2 = 6;
-constexpr pin_size_t endgate3 = 5;
+constexpr int endgate1 = 8;
+constexpr int endgate2 = 6;
+constexpr int endgate3 = 5;
 
-constexpr pin_size_t redButton1 = 4;
-constexpr pin_size_t redButton2 = 3;
-constexpr pin_size_t redButton3 = 2;
+constexpr int redButton1 = 4;
+constexpr int redButton2 = 3;
+constexpr int redButton3 = 2;
 
-constexpr pin_size_t buttonLight1 = 9;
-constexpr pin_size_t buttonLight2 = 10;
-constexpr pin_size_t buttonLight3 = 11;
-
-
-constexpr pin_size_t distributerDonePin = 23; // the limit switch on the third distributer section
-constexpr pin_size_t marbleRelease = 24;
-constexpr pin_size_t distributerReset = 25;
-constexpr pin_size_t augerMotor = 26;
-constexpr pin_size_t stairMotor = 27;
-constexpr pin_size_t gyroMotor = 28;
+constexpr int buttonLight1 = 9;
+constexpr int buttonLight2 = 10;
+constexpr int buttonLight3 = 11;
 
 
+constexpr int distributerDonePin = 23; // the limit switch on the third distributer section
+constexpr int marbleRelease = 24;
+constexpr int distributerReset = 25;
+constexpr int augerMotor = 26;
+constexpr int stairMotor = 27;
+constexpr int gyroMotor = 28;
+
+// function declarations to avoid possible future problems
+void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &endPlates);
 
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
@@ -115,7 +117,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
                 credits++; // you win!
             }
             digitalWrite(augerMotor, HIGH);// reset motor on
-            digitalWrite(stairclimb, LOW);// stairclimb motor off
+            digitalWrite(stairMotor, LOW);// stairclimb motor off
             state = 4;
         }
     }
@@ -135,9 +137,5 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     }
 }
 
-
-int acceptPayment(){
-    // insert the part of payment accepting that runs every cycle
-}
 
 
