@@ -29,7 +29,8 @@ constexpr int augerMotor = 26;
 constexpr int stairMotor = 27;
 constexpr int gyroMotor = 28;
 
-
+// function declarations to avoid possible future problems
+void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &endPlates);
 
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
