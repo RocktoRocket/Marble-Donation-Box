@@ -16,8 +16,8 @@ int coinReaderUpdate(){
         lastPaymentCount = coinPaymentImpulseCount;
         return 0;
     } else { // if the pulses have stopped coming
-        if (paymentImpulseCount < 0 || paymentImpulseCount > 4){
-            paymentImpulseCount = 0;
+        if (coinPaymentImpulseCount < 0 || coinPaymentImpulseCount > 4){
+            coinPaymentImpulseCount = 0;
         }
         int amount = coinConversions[coinPaymentImpulseCount];
         coinPaymentImpulseCount = 0;
