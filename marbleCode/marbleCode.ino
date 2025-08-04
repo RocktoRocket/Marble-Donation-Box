@@ -1,5 +1,6 @@
 #include <arduino.h>
 #include "buttons.h"
+#include "payment.h"
 
 // C++ code
 //
@@ -134,11 +135,6 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
         Serial.write("ERROR: Invalid state. returning to startup state\n");
         state = 0;
     }
-}
-
-
-int acceptPayment(){
-    // insert the part of payment accepting that runs every cycle
 }
 
 
