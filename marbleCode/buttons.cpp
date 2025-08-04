@@ -1,4 +1,4 @@
-#include "button.h"
+#include "buttons.h"
 
 ButtonInterface::ButtonInterface(int Button1, int Button2, int Button3){ // constructor
     pinMode(Button1, INPUT);// setup the pins
