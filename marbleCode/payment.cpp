@@ -34,9 +34,9 @@ int acceptPayment(){
     int centsThisCycle = 0;
 
     static unsigned long lastCoinCheck = 0;
-    if (miliseconds()-lastCoinCheck < coinPulseDelay){
+    if (millis()-lastCoinCheck < coinPulseDelay){
         centsThisCycle += coinReaderUpdate();
-        lastCoinCheck = miliseconds();
+        lastCoinCheck = millis();
     }
     
     //something for the bill reader here

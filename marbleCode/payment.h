@@ -6,7 +6,7 @@
 
 void paymentInturupt();
 int coinReaderUpdate();
-int billReaderUpdate()
+int billReaderUpdate();
 int acceptPayment();
 
 #endif //PAYMENT_H_
