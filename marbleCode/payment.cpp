@@ -21,6 +21,7 @@ int coinReaderUpdate(){
         }
         int amount = coinConversions[coinPaymentImpulseCount];
         coinPaymentImpulseCount = 0;
+        Serial.write(amount + " cents recived from coin reader\n");
         return amount;
     }
 }
