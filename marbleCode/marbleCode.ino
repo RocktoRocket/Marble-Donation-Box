@@ -78,7 +78,7 @@ void loop(){ // this is where code goes to run each cycle
 
 void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &endPlates){
     static unsigned long timerStartTime = 0;
-    if (state = 0){ // wait for credits/payment
+    if (state == 0){ // wait for credits/payment
         if (credits > 0){// on exit of waiting for payment
             Serial.write("payment recived\n");
             credits--;
@@ -86,7 +86,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             state = 1;
         }
     }
-    else if (state = 1){// wait for selection
+    else if (state == 1){// wait for selection
         UI.check();
         if (UI.triggered){// on selection exit/ entrance to releasing marbles
 
@@ -100,7 +100,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             state = 2;
         }
     }
-    else if (state = 2){// wait for marbles to fall out of gates
+    else if (state == 2){// wait for marbles to fall out of gates
         // should put in some sort of timing control
         if (millis() - timerStartTime > 200){
             digitalWrite(marbleRelease, LOW);// release solenoids off
@@ -108,7 +108,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             state = 3;
         }
     }
-    else if (state = 3){ // running
+    else if (state == 3){ // running
         endPlates.check();
         if (endPlates.allThree){// on exit of running
             Serial.write("done running\n");
@@ -121,7 +121,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             state = 4;
         }
     }
-    else if (state = 4){// resetting
+    else if (state == 4){// resetting
         if (digitalRead(distributerDonePin)){
             Serial.write("done reseting\n");
              // stop resetting
