@@ -117,6 +117,8 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
                 Serial.write("you win\n");
                 credits++; // you win!
             }
+            UI.reset();
+            endPlates.reset();
             digitalWrite(augerMotor, HIGH);// reset motor on
             digitalWrite(stairMotor, LOW);// stairclimb motor off
             state = 4;
