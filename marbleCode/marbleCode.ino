@@ -72,6 +72,12 @@ void loop(){ // this is where code goes to run each cycle
     doStates(state, credits, UI, endPlates);
     credits += acceptPayment();
     // lights
+    if (Serial.available()) if (Serial.findUntil("p","\n")) {
+        if (state==4){state = 0;}
+        else {state++;}
+        Serial.print("proceding to state: ");
+        Serial.print(state);
+        Serial.print("\n");}
 }
 
 
