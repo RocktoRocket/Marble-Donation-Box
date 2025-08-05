@@ -103,6 +103,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     else if (state == 2){// wait for marbles to fall out of gates
         // should put in some sort of timing control
         if (millis() - timerStartTime > 200){
+            Serial.write("done waiting\n");
             digitalWrite(marbleRelease, LOW);// release solenoids off
             endPlates.reset(); // get the end plates ready
             state = 3;
