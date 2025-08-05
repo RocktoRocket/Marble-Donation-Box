@@ -7,6 +7,7 @@ ButtonInterface::ButtonInterface(int Button1, int Button2, int Button3){ // cons
     pin1 = Button1;
     pin2 = Button2;
     pin3 = Button3;
+    reset();
 }
 
 void ButtonInterface::reset(){ // clears variables
