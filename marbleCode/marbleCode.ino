@@ -5,6 +5,8 @@
 // C++ code
 //
 
+constexpr int centsPerCredit = 100;
+
 // placeholder pin numbers change these please
 constexpr int readyPin = 13; // saving pinout numbers for later
 constexpr int runningPin = 12; // these three are for testing purposes
@@ -35,6 +37,8 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
 
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
+long centsDonated = 0;
+int remainderCents = 0;
 int credits = 1; // run once on startup to test the system
 int state = 0;
 
@@ -70,8 +74,15 @@ void setup()
 
 void loop(){ // this is where code goes to run each cycle
     doStates(state, credits, UI, endPlates);
-    credits += acceptPayment();
+
+    int centsThisCycle = acceptPayment();
+    centsDonated += centsThisCycle;
+    remainderCents += centsThisCycle;
+    credits += remainderCents/centsPerCredit; // each credit is a dollar, this line should ignore the remainder because credits is an int
+    remainderCents %= centsPerCredit; // sets remaindercents to the remainder after credits is increased
+    
     // lights
+
     if (Serial.available()) if (Serial.findUntil("p","\n")) {
         if (state==4){state = 0;}
         else {state++;}
