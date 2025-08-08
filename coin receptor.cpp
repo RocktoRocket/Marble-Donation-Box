@@ -1,5 +1,5 @@
 #include <Arduino.h> 
-#include <EEPROM.h> 
+//#include <EEPROM.h> 
 //#include <TM1637Display.h> 
 //Define the pins for the TM1637 4-digit display 
 //#define CLK 3 
@@ -10,7 +10,7 @@
 int i; 
 volatile int impulsCount=0; //count pulses from coin reader 
 float total_amount=0; //store total amount entered into coin reader 
-unsigned long lastUpdate = 0; //used for timing 
+// unsigned long lastUpdate = 0; //used for timing 
 volatile unsigned long timeOfLastImpulse = 0; 
 //Interrupt service routine to increment pulse count 
 void incomingImpuls() 
@@ -22,17 +22,16 @@ void setup() {
 Serial.begin(9600); //initialize Serial comjunication for debugging 
 attachInterrupt(digitalPinToInterrupt(2), incomingImpuls, FALLING); 
 //attatch interrupt to pin 2 for the FALLING edge signal, pulse input 
-EEPROM.get(0, total_amount);  // Load previously saved amount from EEPROM at address 0 
-Serial.println("readymessage"); 
+//EEPROM.get(0, total_amount);  // Load previously saved amount from EEPROM at address 0 
+Serial.println("readymessage\n"); 
 // Set display brightness and clear it 
 //display.setBrightness(0x0f);// Max brightness 
 //display.clear(); //clear display on startup 
 } 
 void loop() { 
-  // Run every 500 ms 
-  if (millis() - lastUpdate >= 500 && millis()-timeOfLastImpulse > 160) { 
+  if (millis()-timeOfLastImpulse > 160) { 
   int impulses = impulsCount; 
-  lastUpdate = millis(); 
+  // lastUpdate = millis(); 
   Serial.println(millis()); 
   Serial.println(impulsCount); 
   // Update total based on the number of impulses detected 
@@ -62,3 +61,4 @@ void loop() {
   //display.showNumberDec(displayValue, false); 
 } 
 }
+
