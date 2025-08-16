@@ -2,6 +2,7 @@
 #define LIGHTS_H
 
 #include <Adafruit_NeoPixel>
+#include <arduino.h>
 
 constexpr int padLightStringLength = 20;
 
@@ -14,26 +15,27 @@ class stringLight{
         void update(unsigned int deltaT);
         void reset();
     private:
-        
-        void (*patternPointer[])(void) = {
-            gyro,
-            step,
-            swing,
-            flash,
-            redBlink
-        }
+        uint32_t gyro(unsigned int position);
+        uint32_t swing(unsigned int position);
+        uint32_t step(unsigned int position);
+        uint32_t flash(unsigned int position);
+        uint32_t redBlink(unsigned int position);
+        uint32_t off(unsigned int position);
 };
 
 class bulbLight{
     public:
-        bool state;
+        bool bulbOn;
         int mode;
         void update(unsigned int deltaT);
         void reset();
+        bulbLight();
     private:
         unsigned long blinkTime;
         unsigned long blinkCounter;
-        bulbLight();
+        bool evenBlink();
+        bool stayOn();
+        bool stayOff();
 };
 
 
