@@ -1,6 +1,21 @@
 #include "lights.h"
 
 void stringLight::update(){
+if(mode == 1){
+
+} else if(mode == 2){
+
+} else if(mode == 3){
+
+} else if(mode == 4){
+
+} else if(mode == 5){
+
+} else {
+for (uint32_t* pixel : state){
+pixel = off();
+}
+}
 
 }
 void stringLight::reset(){
