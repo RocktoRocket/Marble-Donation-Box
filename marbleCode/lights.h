@@ -14,6 +14,7 @@ class stringLight{
         int mode;
         void update(unsigned int deltaT);
         void reset();
+        stringLight();
     private:
         uint32_t gyro(unsigned int position);
         uint32_t swing(unsigned int position);
