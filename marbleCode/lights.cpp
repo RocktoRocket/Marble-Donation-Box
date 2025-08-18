@@ -12,7 +12,7 @@ if(mode == 1){
 } else if(mode == 5){
 
 } else {
-for (uint32_t* pixel : state){
+for (uint32_t pixel : state){
 pixel = off();
 }
 }

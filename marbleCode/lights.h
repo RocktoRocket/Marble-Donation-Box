@@ -19,6 +19,7 @@ class stringLight{
         uint32_t gyro(unsigned int position);
         uint32_t swing(unsigned int position);
         uint32_t step(unsigned int position);
+        unsigned long flashStartTime;
         uint32_t flash();
         uint32_t redBlink();
         uint32_t off();
