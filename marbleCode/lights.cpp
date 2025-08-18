@@ -34,32 +34,52 @@ uint32_t stringLight::swing(unsigned int position){
 uint32_t stringLight::step(unsigned int position){
     
 }
-uint32_t stringLight::flash(unsigned int position){
+uint32_t stringLight::flash(){
     
 }
-uint32_t stringLight::redBlink(unsigned int position){
-    
+uint32_t stringLight::redBlink(){
+    if (millis()%1000 > 500){
+        return 0x800000; // half brightness red
+    } else{
+        return 0;
+    }
 }
-uint32_t stringLight::off(unsigned int position){
-    
+uint32_t stringLight::off(){
+    return 0;
 }
 
 
 void bulbLight::update(unsigned int deltsT){
-
+    blinkCounter+=deltaT;
+    blinkCounter%=blinkLength;
+    if (mode == 1){
+        bulbOn = evenBlink();
+    } else if (mode == 2){
+        bulbOn = stayOn();
+    } else{
+        bulbOn = stayOff();
+    }
 }
 void bulbLight::reset(){
     
 }
 bulbLight::bulbLight(){
-    
+    bulbOn = false;
+    mode = 1;
+    blinkLength = 1000;
+    blinkCounter = 0;
+    reset();
 }
-bool bulbLight::evenBlink();{
-    
+bool bulbLight::evenBlink(){
+    if (blinkCounter > blinkLength/2){
+        return true;
+    } else {
+        return false;
+    }
 }
-bol bulbLight::stayOn();{
-    
+bool bulbLight::stayOn(){
+    return true;
 }
-bol bulbLight::stayOff();{
-    
+bool bulbLight::stayOff(){
+    return false;
 }

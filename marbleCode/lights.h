@@ -19,9 +19,9 @@ class stringLight{
         uint32_t gyro(unsigned int position);
         uint32_t swing(unsigned int position);
         uint32_t step(unsigned int position);
-        uint32_t flash(unsigned int position);
-        uint32_t redBlink(unsigned int position);
-        uint32_t off(unsigned int position);
+        uint32_t flash();
+        uint32_t redBlink();
+        uint32_t off();
 };
 
 class bulbLight{
@@ -32,7 +32,7 @@ class bulbLight{
         void reset();
         bulbLight();
     private:
-        unsigned long blinkTime;
+        unsigned long blinkLength;
         unsigned long blinkCounter;
         bool evenBlink();
         bool stayOn();
