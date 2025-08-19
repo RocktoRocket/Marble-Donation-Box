@@ -1,5 +1,7 @@
 #include "lights.h"
 
+constexpr int default_length_of_lighting_patterns = 1000; // milliseconds
+
 void stringLight::update(){
     loopTime = millis()%loopLength;
     if(mode == 1){
@@ -38,7 +40,7 @@ stringLight::stringLight(){
     mode = 5;
     state[] = {0};
     loopTime = 0;
-    loopLength = 1000; // milliseconds
+    loopLength = default_length_of_lighting_patterns; 
 }
 
 
@@ -59,7 +61,7 @@ uint32_t stringLight::flash(){
 }
 
 uint32_t stringLight::redBlink(){
-    if (blinkTime > 500){ //blink evenly
+    if (blinkTime > loopLength/2){ //blink evenly
         return 0x800000; // half brightness red
     } else{
         return 0;
@@ -85,7 +87,7 @@ uint32_t combine(uint32_t first, uint32_t second){
 }
 
 
-
+// stuff for single leds
 void bulbLight::update(unsigned int deltsT){
     blinkCounter+=deltaT;
     blinkCounter%=blinkLength;
@@ -105,7 +107,8 @@ void bulbLight::update(unsigned int deltsT){
 }
 
 void bulbLight::reset(){
-    
+    blinkCounter = 0;
+    mode = 1;
 }
 
 bulbLight::bulbLight(int pin){
