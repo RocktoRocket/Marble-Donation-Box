@@ -15,7 +15,7 @@ constexpr int endgate1 = 8;
 constexpr int endgate2 = 6;
 constexpr int endgate3 = 5;
 
-constexpr int redButton1 = 4;
+constexpr int redButton1 = 14;
 constexpr int redButton2 = 3;
 constexpr int redButton3 = 2;
 
@@ -31,11 +31,14 @@ constexpr int augerMotor = 26;
 constexpr int stairMotor = 27;
 constexpr int gyroMotor = 28;
 
+constexpr int ledPin = 4;
+
 // function declarations to avoid possible future problems
 void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &endPlates);
 
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
+pixelStrip<3> lightString(ledPin)
 int credits = 1; // run once on startup to test the system
 int state = 0;
 
@@ -72,7 +75,7 @@ void setup()
 void loop(){ // this is where code goes to run each cycle
     doStates(state, credits, UI, endPlates);
     credits += acceptPayment();
-    lights();// lights
+    lightString.step();// lights
     if (Serial.available()) if (Serial.findUntil("p","\n")) {
         if (state==4){state = 0;}
         else {state++;}

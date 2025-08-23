@@ -47,19 +47,19 @@ stringLight::stringLight(){
 
 
 uint32_t stringLight::gyro(unsigned int position){
- 
+    return 0; // replace this
 }
 
 uint32_t stringLight::swing(unsigned int position){
-    
+    return 0;// replace this
 }
 
 uint32_t stringLight::step(unsigned int position){
-    
+    return 0;// replace this
 }
 
 uint32_t stringLight::flash(){
-    
+    return 0;// replace this
 }
 
 uint32_t stringLight::redBlink(){
@@ -139,12 +139,24 @@ bool bulbLight::stayOff(){
 
 
 void pixelStrip::step(){
+    for (stringLight b: blocks){// update pattern animations
+        b.update();
+    }
 
+    for (int i = 0; i < numPixels; i++){ // copy colors to neopixel strand buffer
+        pixels.setPixelColor(i, blocks[i/numberOfBlocks].state[i%padLightStringLength]);
+    }
+    pixels.show();
 }
 
-pixelStrip::pixelStrip(int pin,){
+void pixelStrip::blockSetMode(int block, int newMode){
+    blocks[block].mode = newMode;
+}
+
+pixelStrip::pixelStrip(int pin){
     pixels.setPin(pin);
     for (int i = 0; i < numberOfBlocks; i++){
         blocks[i] = stringLight() // this neds to be changed if block length is variable
     }
+    pixels.begin();
 }
