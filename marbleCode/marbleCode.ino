@@ -1,6 +1,7 @@
 #include <arduino.h>
 #include "buttons.h"
 #include "payment.h"
+#include "lights.h"
 
 // C++ code
 //
@@ -71,7 +72,7 @@ void setup()
 void loop(){ // this is where code goes to run each cycle
     doStates(state, credits, UI, endPlates);
     credits += acceptPayment();
-    // lights
+    lights();// lights
     if (Serial.available()) if (Serial.findUntil("p","\n")) {
         if (state==4){state = 0;}
         else {state++;}

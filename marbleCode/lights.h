@@ -4,7 +4,8 @@
 #include <Adafruit_NeoPixel>
 #include <arduino.h>
 
-constexpr int padLightStringLength = 20;
+constexpr int padLightStringLength = 17;
+
 
 
 class stringLight{
@@ -16,13 +17,13 @@ class stringLight{
         void reset();
         void onPanelTriggered();
         stringLight();
+        unsigned long flashStartTime;
     private:
         unsigned long loopTime;
         int loopLength;
         uint32_t gyro(unsigned int position);
         uint32_t swing(unsigned int position);
         uint32_t step(unsigned int position);
-        unsigned long flashStartTime;
         uint32_t flash();
         uint32_t redBlink();
         uint32_t off();
@@ -43,6 +44,17 @@ class bulbLight{
         bool evenBlink();
         bool stayOn();
         bool stayOff();
+};
+
+
+template<int numberOfBlocks = 3> // add number of pixels in each block here later if needed
+class pixelStrip{
+    public:
+        void step();
+        pixelStrip();
+    private:
+        Adafruit_NeoPixel pixels(padLightStringLength * numberOfBlocks, pin, NEO_RBG);
+        stringLight blocks[numberOfBlocks];
 };
 
 

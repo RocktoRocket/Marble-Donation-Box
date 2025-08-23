@@ -1,5 +1,7 @@
 #include "lights.h"
 
+
+
 constexpr int default_length_of_lighting_patterns = 1000; // milliseconds
 
 void stringLight::update(){
@@ -133,4 +135,16 @@ bool bulbLight::stayOn(){
 
 bool bulbLight::stayOff(){
     return false;
+}
+
+
+void pixelStrip::step(){
+
+}
+
+pixelStrip::pixelStrip(int pin,){
+    pixels.setPin(pin);
+    for (int i = 0; i < numberOfBlocks; i++){
+        blocks[i] = stringLight() // this neds to be changed if block length is variable
+    }
 }
