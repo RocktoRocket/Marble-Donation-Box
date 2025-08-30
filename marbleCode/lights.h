@@ -1,7 +1,7 @@
 #ifndef LIGHTS_H
 #define LIGHTS_H
 
-#include <Adafruit_NeoPixel>
+#include <Adafruit_NeoPixel.h>
 #include <arduino.h>
 
 constexpr int padLightStringLength = 17;// this is how many lights each pad currently has
