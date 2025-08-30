@@ -150,7 +150,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             endPlates.reset();
             digitalWrite(augerMotor, HIGH);// reset motor on
             digitalWrite(stairMotor, LOW);// stairclimb motor off
-            digitalWrite(gyroReleasePin, HIGH);// release solenoids extend
+            digitalWrite(gyroReleasePin, HIGH);// release solenoids extend to catch marbles (if the distributer design changes, then retract here i guess)
             digitalWrite(stepsReleasePin, HIGH);
             digitalWrite(stairReleasePin, HIGH);
             state = 4;
