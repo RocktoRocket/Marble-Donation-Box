@@ -4,7 +4,7 @@
 #include <Adafruit_NeoPixel>
 #include <arduino.h>
 
-constexpr int padLightStringLength = 17;
+constexpr int padLightStringLength = 17;// this is how many lights each pad currently has
 
 
 
