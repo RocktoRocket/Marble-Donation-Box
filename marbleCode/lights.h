@@ -5,6 +5,7 @@
 #include <arduino.h>
 
 constexpr int padLightStringLength = 17;
+constexpr int numPads = 3;
 
 
 
@@ -47,16 +48,16 @@ class bulbLight{
 };
 
 
-template<int numberOfBlocks = 3> // add number of pixels in each block here later if needed
+//template<int numberOfBlocks = 3> // add number of pixels in each block here later if needed
 class pixelStrip{ // the template is incase we want to add a light strip of diffrent length later
     public:
         void step();
         void blockSetMode(int block, int newMode);
         pixelStrip();
-        const int numPixels = padLightStringLength * numberOfBlocks;// modify if variable block length
+        const int numPixels = padLightStringLength * numPads;// modify if variable block length
     private:
         Adafruit_NeoPixel pixels(numPixels, pin, NEO_RBG);
-        stringLight blocks[numberOfBlocks];
+        stringLight blocks[numPads];
 };
 
 
