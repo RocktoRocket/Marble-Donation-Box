@@ -9,6 +9,7 @@ constexpr int numberOfBlocks = 3; // remove to use templates
 constexpr int  NOMPIXELS (padLightStringLength * numberOfBlocks); // modify if variable block length
 
 
+
 class stringLight{
     public:
         uint32_t state[padLightStringLength]; // uint_t is the type that neopixel uses to store colors on the string

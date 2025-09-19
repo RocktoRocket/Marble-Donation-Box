@@ -133,6 +133,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
         if (millis() - timerStartTime > jumpsReleaseOffset){digitalWrite(jumpsReleasePin, LOW);}
         if (millis() - timerStartTime > stairReleaseOffset){digitalWrite(stairReleasePin, LOW);}
 
+
         if (millis() - timerStartTime > lastReleaseTimeOffset){
             Serial.write("done waiting\n");
             endPlates.reset(); // get the end plates ready
@@ -153,6 +154,7 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             digitalWrite(stairMotor, LOW);// stairclimb motor off
             digitalWrite(gyroReleasePin, HIGH);// release solenoids extend to catch marbles (if the distributer design changes, then retract here i guess)
             digitalWrite(jumpsReleasePin, HIGH);
+
             digitalWrite(stairReleasePin, HIGH);
             state = 4;
         }
