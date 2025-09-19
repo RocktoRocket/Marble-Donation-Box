@@ -1,6 +1,7 @@
 #include <arduino.h>
 #include "buttons.h"
 #include "payment.h"
+#include "lights.h"
 
 // C++ code
 //
@@ -14,7 +15,7 @@ constexpr int endgate1 = 8;
 constexpr int endgate2 = 6;
 constexpr int endgate3 = 5;
 
-constexpr int redButton1 = 4;
+constexpr int redButton1 = 14;
 constexpr int redButton2 = 3;
 constexpr int redButton3 = 2;
 
@@ -30,11 +31,25 @@ constexpr int augerMotor = 26;
 constexpr int stairMotor = 27;
 constexpr int gyroMotor = 28;
 
+constexpr int gyroReleasePin = 30;
+constexpr int jumpsReleasePin = 31;
+constexpr int stairReleasePin = 32;
+
+
+constexpr int ledPin = 4;
+
+
+constexpr unsigned long gyroReleaseOffset = 0; // these are the times that the release gates wait in milliseconds after the user presses the button
+constexpr unsigned long jumpsReleaseOffset = 0;// the next step triggers imediately
+constexpr unsigned long stairReleaseOffset = 0;
+
 // function declarations to avoid possible future problems
 void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &endPlates);
 
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
+pixelStrip lightString(ledPin); // re-add <3> if templates are used
+Adafruit_NeoPixel pixels(NOMPIXELS, ledPin, NEO_RBG + NEO_KHZ800);
 int credits = 1; // run once on startup to test the system
 int state = 0;
 
@@ -63,6 +78,10 @@ void setup()
   pinMode(stairMotor, OUTPUT);
   pinMode(gyroMotor, OUTPUT);
 
+  pinMode(gyroReleasePin, OUTPUT);
+  pinMode(jumpsReleasePin, OUTPUT);
+  pinMode(stairReleasePin, OUTPUT);
+
   Serial.begin(9600);
   Serial.write("ready\n");
 
@@ -71,7 +90,9 @@ void setup()
 void loop(){ // this is where code goes to run each cycle
     doStates(state, credits, UI, endPlates);
     credits += acceptPayment();
-    // lights
+    lightString.step();// lights
+
+    // debug code here:
     if (Serial.available()) if (Serial.findUntil("p","\n")) {
         if (state==4){state = 0;}
         else {state++;}
@@ -107,10 +128,13 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
         }
     }
     else if (state == 2){// wait for marbles to fall out of gates
-        // should put in some sort of timing control
-        if (millis() - timerStartTime > 200){
+        static unsigned long lastReleaseTimeOffset = max(gyroReleaseOffset, max(jumpsReleaseOffset, stairReleaseOffset));
+        if (millis() - timerStartTime > gyroReleaseOffset){digitalWrite(gyroReleasePin, LOW);}// please expand to a multi line if when adding more lines to statements
+        if (millis() - timerStartTime > jumpsReleaseOffset){digitalWrite(jumpsReleasePin, LOW);}
+        if (millis() - timerStartTime > stairReleaseOffset){digitalWrite(stairReleasePin, LOW);}
+
+        if (millis() - timerStartTime > lastReleaseTimeOffset){
             Serial.write("done waiting\n");
-            digitalWrite(marbleRelease, LOW);// release solenoids off
             endPlates.reset(); // get the end plates ready
             state = 3;
         }
@@ -127,6 +151,9 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             endPlates.reset();
             digitalWrite(augerMotor, HIGH);// reset motor on
             digitalWrite(stairMotor, LOW);// stairclimb motor off
+            digitalWrite(gyroReleasePin, HIGH);// release solenoids extend to catch marbles (if the distributer design changes, then retract here i guess)
+            digitalWrite(jumpsReleasePin, HIGH);
+            digitalWrite(stairReleasePin, HIGH);
             state = 4;
         }
     }
