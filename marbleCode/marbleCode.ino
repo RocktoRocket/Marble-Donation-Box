@@ -43,6 +43,10 @@ constexpr unsigned long gyroReleaseOffset = 0; // these are the times that the r
 constexpr unsigned long jumpsReleaseOffset = 0;// the next step triggers imediately
 constexpr unsigned long stairReleaseOffset = 0;
 
+constexpr unsigned long randomGyroReleaseOffset = 0; // to apply randomness to the release time, set the value to the maximum variation in milliseconds needed
+constexpr unsigned long randomJumpsReleaseOffset = 0; // these are multiplied by a random number from -1 to 1 befeore being added
+constexpr unsigned long randomStairReleaseOffset = 0;
+
 // function declarations to avoid possible future problems
 void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &endPlates);
 
@@ -129,9 +133,9 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     }
     else if (state == 2){// wait for marbles to fall out of gates
         static unsigned long lastReleaseTimeOffset = max(gyroReleaseOffset, max(jumpsReleaseOffset, stairReleaseOffset));
-        if (millis() - timerStartTime > gyroReleaseOffset){digitalWrite(gyroReleasePin, LOW);}// please expand to a multi line if when adding more lines to statements
-        if (millis() - timerStartTime > jumpsReleaseOffset){digitalWrite(jumpsReleasePin, LOW);}
-        if (millis() - timerStartTime > stairReleaseOffset){digitalWrite(stairReleasePin, LOW);}
+        if (millis() - timerStartTime > gyroReleaseOffset + random(-1*randomGyroReleaseOffset,randomGyroReleaseOffset)){digitalWrite(gyroReleasePin, LOW);}// please expand to a multi line if when adding more lines to statements
+        if (millis() - timerStartTime > jumpsReleaseOffset + random(-1*randomJumpsReleaseOffset,randomJumpsReleaseOffset)){digitalWrite(jumpsReleasePin, LOW);} // the arduino random() uses (min, max) as it's inputs
+        if (millis() - timerStartTime > stairReleaseOffset + random(-1*randomStairReleaseOffset,randomStairReleaseOffset)){digitalWrite(stairReleasePin, LOW);}
 
 
         if (millis() - timerStartTime > lastReleaseTimeOffset){
