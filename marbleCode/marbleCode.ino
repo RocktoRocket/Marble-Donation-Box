@@ -48,8 +48,8 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
 
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
-pixelStrip lightString(ledPin); // re-add <3> if templates are used
 Adafruit_NeoPixel pixels(NOMPIXELS, ledPin, NEO_RBG + NEO_KHZ800);
+pixelStrip lightString(ledPin); // re-add <3> if templates are used
 int credits = 1; // run once on startup to test the system
 int state = 0;
 
