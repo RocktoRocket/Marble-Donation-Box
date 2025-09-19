@@ -48,7 +48,8 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
 
 ButtonInterface UI(redButton1, redButton2, redButton3);
 ButtonInterface endPlates(endgate1, endgate2, endgate3);
-pixelStrip<3> lightString(ledPin)
+Adafruit_NeoPixel pixels(NOMPIXELS, ledPin, NEO_RBG + NEO_KHZ800);
+pixelStrip lightString(ledPin); // re-add <3> if templates are used
 int credits = 1; // run once on startup to test the system
 int state = 0;
 
@@ -128,9 +129,10 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
     }
     else if (state == 2){// wait for marbles to fall out of gates
         static unsigned long lastReleaseTimeOffset = max(gyroReleaseOffset, max(jumpsReleaseOffset, stairReleaseOffset));
-        if (millis() - timerStartTime > gyroReleaseOffset){digitalWrite(gyroReleasePin, LOW)}// please expand to a multi line if when adding more lines to statements
-        if (millis() - timerStartTime > stepsReleaseOffset){digitalWrite(stepsReleasePin, LOW)}
-        if (millis() - timerStartTime > stairReleaseOffset){digitalWrite(stairReleasePin, LOW)}
+        if (millis() - timerStartTime > gyroReleaseOffset){digitalWrite(gyroReleasePin, LOW);}// please expand to a multi line if when adding more lines to statements
+        if (millis() - timerStartTime > jumpsReleaseOffset){digitalWrite(jumpsReleasePin, LOW);}
+        if (millis() - timerStartTime > stairReleaseOffset){digitalWrite(stairReleasePin, LOW);}
+
 
         if (millis() - timerStartTime > lastReleaseTimeOffset){
             Serial.write("done waiting\n");
@@ -151,7 +153,8 @@ void doStates(int &state, int &credits, ButtonInterface &UI, ButtonInterface &en
             digitalWrite(augerMotor, HIGH);// reset motor on
             digitalWrite(stairMotor, LOW);// stairclimb motor off
             digitalWrite(gyroReleasePin, HIGH);// release solenoids extend to catch marbles (if the distributer design changes, then retract here i guess)
-            digitalWrite(stepsReleasePin, HIGH);
+            digitalWrite(jumpsReleasePin, HIGH);
+
             digitalWrite(stairReleasePin, HIGH);
             state = 4;
         }

@@ -4,7 +4,7 @@
 
 constexpr int default_length_of_lighting_patterns = 1000; // milliseconds
 
-void stringLight::update(){
+void stringLight::update(unsigned int deltaT){
     loopTime = millis()%loopLength;
     if(mode == 1){
         for (int i = 0; i < padLightStringLength; i++){
@@ -35,12 +35,12 @@ void stringLight::update(){
 
 void stringLight::reset(){
     mode = 5;
-    state[] = {0};
+    state[padLightStringLength] = {0};
 }
 
 stringLight::stringLight(){
     mode = 5;
-    state[] = {0};
+    state[padLightStringLength] = {0};
     loopTime = 0;
     loopLength = default_length_of_lighting_patterns; 
 }
@@ -63,7 +63,7 @@ uint32_t stringLight::flash(){
 }
 
 uint32_t stringLight::redBlink(){
-    if (blinkTime > loopLength/2){ //blink evenly
+    if (loopTime > loopLength/2){ //blink evenly
         return 0x800000; // half brightness red
     } else{
         return 0;
@@ -74,7 +74,7 @@ uint32_t stringLight::off(){
     return 0;
 }
 
-uint32_t combine(uint32_t first, uint32_t second){
+uint32_t stringLight::combine(uint32_t first, uint32_t second){
     uint16_t r,b,g;
     r = first & 0xFF0000;
     b = first & 0x00FF00;
@@ -90,7 +90,7 @@ uint32_t combine(uint32_t first, uint32_t second){
 
 
 // stuff for single leds
-void bulbLight::update(unsigned int deltsT){
+void bulbLight::update(unsigned int deltaT){
     blinkCounter+=deltaT;
     blinkCounter%=blinkLength;
     if (mode == 1){
@@ -139,24 +139,28 @@ bool bulbLight::stayOff(){
 
 
 void pixelStrip::step(){
+    unsigned long delta = millis() - lastTime;
+    lastTime = millis();
     for (stringLight b: blocks){// update pattern animations
-        b.update();
+        b.update(delta);
     }
 
-    for (int i = 0; i < numPixels; i++){ // copy colors to neopixel strand buffer
-        pixels.setPixelColor(i, blocks[i/numberOfBlocks].state[i%padLightStringLength]);
+    for (int i = 0; i < NOMPIXELS; i++){ // copy colors to neopixel strand buffer
+        pixels.setPixelColor(i, blocks[(i)/(numberOfBlocks)].state[i%padLightStringLength]);
     }
     pixels.show();
+    
 }
 
 void pixelStrip::blockSetMode(int block, int newMode){
     blocks[block].mode = newMode;
 }
 
-pixelStrip::pixelStrip(int pin){
-    pixels.setPin(pin);
+pixelStrip::pixelStrip(Adafruit_NeoPixel* newpixel){
+    pixels = newpixel;
+    lastTime = 0;
     for (int i = 0; i < numberOfBlocks; i++){
-        blocks[i] = stringLight() // this neds to be changed if block length is variable
+        blocks[i] = stringLight(); // this neds to be changed if block length is variable
     }
     pixels.begin();
 }
