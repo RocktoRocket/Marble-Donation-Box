@@ -1,12 +1,12 @@
 #ifndef LIGHTS_H
 #define LIGHTS_H
 
-#include <Adafruit_NeoPixel>
+#include <Adafruit_NeoPixel.h>
 #include <arduino.h>
 
-constexpr int padLightStringLength = 17;
-constexpr int numPads = 3;
-
+constexpr int padLightStringLength = 17;// this is how many lights each pad currently has
+constexpr int numberOfBlocks = 3; // remove to use templates 
+constexpr int  NOMPIXELS (padLightStringLength * numberOfBlocks); // modify if variable block length
 
 
 class stringLight{
@@ -49,15 +49,18 @@ class bulbLight{
 
 
 //template<int numberOfBlocks = 3> // add number of pixels in each block here later if needed
-class pixelStrip{ // the template is incase we want to add a light strip of diffrent length later
+
+class pixelStrip{ 
+    private:
+        unsigned long lastTime;
+        stringLight blocks[numberOfBlocks];
+        Adafruit_NeoPixel pixels;
     public:
         void step();
         void blockSetMode(int block, int newMode);
-        pixelStrip();
-        const int numPixels = padLightStringLength * numPads;// modify if variable block length
-    private:
-        Adafruit_NeoPixel pixels(numPixels, pin, NEO_RBG);
-        stringLight blocks[numPads];
+        pixelStrip(Adafruit_NeoPixel* pixel);
+        
+    
 };
 
 
